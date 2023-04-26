@@ -38,7 +38,8 @@ test:
     - qpd
     - qpd_dask
     - qpd_pandas
-    - qpd_ray  # [linux64 or win]
+    # modin-ray: no support for python 3.11 and missing on other archs than linux-64 and win-64  
+    - qpd_ray  # [py<311 and (linux64 or win)]
     - qpd_test
     - qpd_version
   commands:
@@ -48,9 +49,11 @@ test:
   requires:
     - pip
     - dask
-  #  - pytest 
-    - modin-ray >=0.8.1.1  # [linux64 or win]
-  #  - pandasql 
+    # modin-ray: no support for python 3.11 and missing on other archs than linux-64 and win-64
+    - modin-ray >=0.8.1.1  # [py<311 and (linux64 or win)]
+    # Would be needed to run tests:
+    #- pandasql 
+    #- pytest
 
 about:
   home: https://pypi.org/project/qpd/
