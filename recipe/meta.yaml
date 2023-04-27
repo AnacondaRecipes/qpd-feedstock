@@ -30,8 +30,8 @@ requirements:
     - triad >=0.8.0
 
 test:
-  source_files:  # [py<311 and (linux or win)]
-   - tests  # [py<311 and (linux or win)]
+  source_files:  # [py<311 and (linux64 or win)]
+   - tests  # [py<311 and (linux64 or win)]
   imports:
     - qpd
     - qpd_dask
@@ -44,15 +44,15 @@ test:
     - pip check
     # Tests restricted due to modin-ray and ray-defaults unavailability.
     # Switching off tests for features not implemented yet (NotImplementedError)
-    - pytest -vvv --capture=tee-sys tests -k "not (test_union or test_window_sum_partition_by or test_order_by_limit or test_with)"  # [py<311 and (linux or win)]
+    - pytest -vvv --capture=tee-sys tests -k "not (test_union or test_window_sum_partition_by or test_order_by_limit or test_with)"  # [py<311 and (linux64 or win)]
   requires:
     - pip
     - dask
     # modin-ray and ray-default: no support for python 3.11 and missing on all archs except for linux-64 and win-64
     - modin-ray >=0.8.1.1  # [py<311 and (linux64 or win)]
     # Required to run pytest tests (restricting here to be consistent with the pytest command):
-    - pandasql  # [py<311 and (linux or win)]
-    - pytest  # [py<311 and (linux or win)]
+    - pandasql  # [py<311 and (linux64 or win)]
+    - pytest  # [py<311 and (linux64 or win)]
 
 about:
   home: https://pypi.org/project/qpd/
