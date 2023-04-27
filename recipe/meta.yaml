@@ -1,5 +1,5 @@
 {% set name = "qpd" %}
-{% set version = "0.4.0" %}
+{% set version = "0.4.1" %}
 
 
 package:
@@ -8,53 +8,69 @@ package:
 
 source:
   url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/qpd-{{ version }}.tar.gz
-  sha256: 70e262130c71e8b4fd12c0e3b93030c9c19f949e2b1c3bd63025c43d03c6ef00
+  sha256: 2bf3fb0a4cf2307b7f3df06ac6d7a4396da7867350d17f3c37cb415fbb8089f7
 
 build:
+  # s390x is missing triad  
+  skip: true  # [py<37 or s390x]
   number: 0
-  noarch: python
-  script: {{ PYTHON }} -m pip install . -vv
+  script: {{ PYTHON }} -m pip install . --no-deps --no-build-isolation --ignore-installed -vvv
 
 requirements:
   host:
     - pip
-    - python >=3.6
+    - python
+    - setuptools
+    - wheel
   run:
     - adagio
-    - antlr4-python3-runtime >=4.10
-    - pandas >=1.0.2
-    - python >=3.6
-    - sqlalchemy
-    - triad
+    - antlr4-python3-runtime >=4.11.1,<4.12
+    - pandas >=1.2.0
+    - python
+    - triad >=0.8.0
 
 test:
-  source_files:
-    - tests
+  source_files:  # [py<311 and (linux64 or win)]
+   - tests  # [py<311 and (linux64 or win)]
   imports:
     - qpd
     - qpd_dask
     - qpd_pandas
-    - qpd_ray
+    # modin-ray and ray-default: no support for python 3.11 and missing on all archs except for linux-64 and win-64  
+    - qpd_ray  # [py<311 and (linux64 or win)]
     - qpd_test
     - qpd_version
   commands:
     - pip check
-    # Comment out test suite until ray issue resolved
-#     - pytest -vvv --capture=tee-sys tests
+    # Tests restricted due to modin-ray and ray-defaults unavailability.
+    # Switching off tests for features not implemented yet (NotImplementedError)
+    - pytest -vvv --capture=tee-sys tests -k "not (test_union or test_window_sum_partition_by or test_order_by_limit or test_with)"  # [py<311 and (linux64 or win)]
   requires:
-    - cloudpickle >=1.4.0
-    - dask
-    - modin-ray
-    - pandas >=1.1.2
-#     - pandasql
     - pip
-#     - pytest    
+    - dask
+    # modin-ray and ray-default: no support for python 3.11 and missing on all archs except for linux-64 and win-64
+    - modin-ray >=0.8.1.1  # [py<311 and (linux64 or win)]
+    # Required to run pytest tests (restricting here to be consistent with the pytest command):
+    - pandasql  # [py<311 and (linux64 or win)]
+    - pytest  # [py<311 and (linux64 or win)]
 
 about:
   home: https://pypi.org/project/qpd/
-  summary: Query Pandas Using SQL
   license: Apache-2.0
+  license_family: Apache
   license_file: LICENSE
+  summary: Query Pandas Using SQL
+  description: |
+    QPD let you run the same SQL (SELECT for now) statements on different computing 
+    frameworks with pandas-like interfaces. Currently, it support Pandas, Dask and 
+    Ray (via Modin on Ray). QPD directly translates SQL into pandas-like operations 
+    to run on the backend computing frameworks, so it can be significantly faster 
+    than some other approaches, for example, to dump pandas dataframes into SQLite, 
+    run SQL and convert the result back into a pandas dataframe. However, the top 
+    priorities of QPD are correctness and consistency. It ensures the results of 
+    implemented SQL features following SQL convention, and it ensures consistent 
+    behavior regardless of backend computing frameworks. 
+  doc_url: https://pypi.org/project/qpd/
 
 extra:
   recipe-maintainers:
