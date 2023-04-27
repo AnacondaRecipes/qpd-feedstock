@@ -28,8 +28,6 @@ requirements:
     - pandas >=1.2.0
     - python
     - triad >=0.8.0
-  run_constrained:
-    - modin-ray >=0.8.1.1
 
 test:
   #source_files: 
@@ -38,7 +36,7 @@ test:
     - qpd
     - qpd_dask
     - qpd_pandas
-    # modin-ray: no support for python 3.11 and missing on other archs than linux-64 and win-64  
+    # modin-ray and ray-default: no support for python 3.11 and missing on all archs except for linux-64 and win-64  
     - qpd_ray  # [py<311 and (linux64 or win)]
     - qpd_test
     - qpd_version
@@ -49,7 +47,7 @@ test:
   requires:
     - pip
     - dask
-    # modin-ray: no support for python 3.11 and missing on other archs than linux-64 and win-64
+    # modin-ray and ray-default: no support for python 3.11 and missing on all archs except for linux-64 and win-64
     - modin-ray >=0.8.1.1  # [py<311 and (linux64 or win)]
     # Would be needed to run tests:
     #- pandasql 
