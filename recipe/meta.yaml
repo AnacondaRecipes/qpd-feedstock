@@ -1,5 +1,5 @@
 {% set name = "qpd" %}
-{% set version = "0.4.1" %}
+{% set version = "0.4.4" %}
 
 
 package:
@@ -7,14 +7,14 @@ package:
   version: {{ version }}
 
 source:
-  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/qpd-{{ version }}.tar.gz
-  sha256: 2bf3fb0a4cf2307b7f3df06ac6d7a4396da7867350d17f3c37cb415fbb8089f7
+  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
+  sha256: e0ed05b88e321ea9935874377bda11339c90f1469f34344e9b41d16b8088e136
 
 build:
-  # s390x is missing triad  
-  skip: true  # [py<37 or s390x]
   number: 0
-  script: {{ PYTHON }} -m pip install . --no-deps --no-build-isolation --ignore-installed -vvv
+  # s390x is missing triad  
+  skip: true  # [py<38 or s390x]
+  script: {{ PYTHON }} -m pip install . --no-deps --no-build-isolation --ignore-installed -vv
 
 requirements:
   host:
@@ -27,11 +27,9 @@ requirements:
     - antlr4-python3-runtime >=4.11.1,<4.12
     - pandas >=1.2.0
     - python
-    - triad >=0.8.0
+    - triad >=0.9.0
 
 test:
-  source_files:  # [py<311 and (linux64 or win)]
-   - tests  # [py<311 and (linux64 or win)]
   imports:
     - qpd
     - qpd_dask
@@ -40,11 +38,8 @@ test:
     - qpd_ray  # [py<311 and (linux64 or win)]
     - qpd_test
     - qpd_version
-  commands:
-    - pip check
-    # Tests restricted due to modin-ray and ray-defaults unavailability.
-    # Switching off tests for features not implemented yet (NotImplementedError)
-    - pytest -vvv --capture=tee-sys tests -k "not (test_union or test_window_sum_partition_by or test_order_by_limit or test_with)"  # [py<311 and (linux64 or win)]
+  source_files:  # [py<311 and (linux64 or win)]
+   - tests       # [py<311 and (linux64 or win)]
   requires:
     - pip
     - dask
@@ -53,6 +48,11 @@ test:
     # Required to run pytest tests (restricting here to be consistent with the pytest command):
     - pandasql  # [py<311 and (linux64 or win)]
     - pytest  # [py<311 and (linux64 or win)]
+  commands:
+    - pip check
+    # Tests restricted due to modin-ray and ray-defaults unavailability.
+    # Switching off tests for features not implemented yet (NotImplementedError)
+    - pytest -vvv --capture=tee-sys tests -k "not (test_union or test_window_sum_partition_by or test_order_by_limit or test_with)"  # [py<311 and (linux64 or win)]
 
 about:
   home: https://pypi.org/project/qpd/
