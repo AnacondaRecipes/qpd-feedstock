@@ -34,19 +34,17 @@ test:
     - qpd
     - qpd_dask
     - qpd_pandas
-    # modin-ray and ray-default: no support for python 3.11 and missing on all archs except for linux-64 and win-64  
-    - qpd_ray  # [py<311 and (linux64 or win)]
+    - qpd_ray
     - qpd_test
     - qpd_version
   requires:
     - pip
+    - cloudpickle >=1.4.0
     - dask
-    # modin-ray and ray-default: no support for python 3.11 and missing on all archs except for linux-64 and win-64
-    - modin-ray >=0.8.1.1  # [py<311 and (linux64 or win)]
-    # Required to run pytest tests (restricting here to be consistent with the pytest command):
-    - pandasql  # [py<311 and (linux64 or win)]
+    - modin-ray
+    - pandas >=1.1.2
   commands:
-    - pip check
+    - pip check 
 
 about:
   home: https://pypi.org/project/qpd/
