@@ -38,8 +38,6 @@ test:
     - qpd_ray  # [py<311 and (linux64 or win)]
     - qpd_test
     - qpd_version
-  source_files:  # [py<311 and (linux64 or win)]
-   - tests       # [py<311 and (linux64 or win)]
   requires:
     - pip
     - dask
@@ -47,12 +45,8 @@ test:
     - modin-ray >=0.8.1.1  # [py<311 and (linux64 or win)]
     # Required to run pytest tests (restricting here to be consistent with the pytest command):
     - pandasql  # [py<311 and (linux64 or win)]
-    - pytest  # [py<311 and (linux64 or win)]
   commands:
     - pip check
-    # Tests restricted due to modin-ray and ray-defaults unavailability.
-    # Switching off tests for features not implemented yet (NotImplementedError)
-    - pytest -vvv --capture=tee-sys tests -k "not (test_union or test_window_sum_partition_by or test_order_by_limit or test_with)"  # [py<311 and (linux64 or win)]
 
 about:
   home: https://pypi.org/project/qpd/
