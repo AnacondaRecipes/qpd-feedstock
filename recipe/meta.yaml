@@ -34,7 +34,8 @@ test:
     - qpd
     - qpd_dask
     - qpd_pandas
-    - qpd_ray
+    # modin-ray and ray-default: no support for python 3.11 and missing on all archs except for linux-64 and win-64  
+    - qpd_ray  # [py<311 and (linux64 or win)]
     - qpd_test
     - qpd_version
   requires:
