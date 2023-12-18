@@ -13,7 +13,7 @@ source:
 build:
   number: 0
   # s390x is missing triad  
-  skip: true  # [py<38 or s390x]
+  skip: true  # [py<37 or s390x]
   script: {{ PYTHON }} -m pip install . --no-deps --no-build-isolation --ignore-installed -vv
 
 requirements:
@@ -28,6 +28,8 @@ requirements:
     - pandas >=1.2.0
     - python
     - triad >=0.9.0
+  run_constrained:
+    - cloudpickle >=1.4.0
 
 test:
   imports:
@@ -40,10 +42,6 @@ test:
     - qpd_version
   requires:
     - pip
-    - cloudpickle >=1.4.0
-    - dask
-    # modin-ray and ray-default: no support for python 3.11 and missing on all archs except for linux-64 and win-64
-    - modin-ray >=0.8.1.1  # [py<311 and (linux64 or win)]
   commands:
     - pip check 
 
