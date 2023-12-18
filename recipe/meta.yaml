@@ -42,6 +42,7 @@ test:
     - qpd_version
   requires:
     - pip
+    - dask
   commands:
     - pip check 
 
