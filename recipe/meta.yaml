@@ -1,7 +1,6 @@
 {% set name = "qpd" %}
 {% set version = "0.4.4" %}
 
-
 package:
   name: {{ name|lower }}
   version: {{ version }}
